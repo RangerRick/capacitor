@@ -137,6 +137,7 @@ Are we missing your awesome plugin? [Add it to this page](https://github.com/ion
 
 | Name                    | NPM package | GitHub | Notes |
 | ----------------------- | ----------- | ------ | ------ |
+| IBeacon Client | `capacitor-ibeacon` | <https://github.com/RangerRick/capacitor-ibeacon> | iOS |
 | Bluetooth Low Energy Client | `cap-bluetooth-low-energy-client` | <https://github.com/robmarti/cap-bluetooth-low-energy-client> | Web, Android|
 
 ## Sensors
