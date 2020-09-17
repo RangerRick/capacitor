@@ -9,8 +9,16 @@ public class CAPStoragePlugin: CAPPlugin {
   
   public override func load() {
   }
-  
-  func getDefaults() -> UserDefaults {
+
+  func getDefaults(_ call: CAPPluginCall) -> UserDefaults {
+    let suiteName = call.getString("suiteName")
+
+    if (suiteName != nil && suiteName != "") {
+      let def = UserDefaults.init(suiteName: suiteName)!
+      if (def != nil) {
+        return def
+      }
+    }
     return UserDefaults.standard
   }
   
@@ -20,7 +28,7 @@ public class CAPStoragePlugin: CAPPlugin {
       return
     }
 
-    let value = getDefaults().string(forKey: makeKey(key))
+    let value = getDefaults(call).string(forKey: makeKey(key))
     call.resolve([
       "value": value as Any
     ])
@@ -34,7 +42,7 @@ public class CAPStoragePlugin: CAPPlugin {
     let value = call.getString("value", "")
     
     
-    getDefaults().set(value, forKey: makeKey(key))
+    getDefaults(call).set(value, forKey: makeKey(key))
     
     call.resolve()
   }
@@ -45,13 +53,13 @@ public class CAPStoragePlugin: CAPPlugin {
       return
     }
 
-    getDefaults().removeObject(forKey: makeKey(key))
+    getDefaults(call).removeObject(forKey: makeKey(key))
     
     call.resolve()
   }
   
   @objc func keys(_ call: CAPPluginCall) {
-    let keys = getDefaults().dictionaryRepresentation().keys.filter({ (key) -> Bool in
+    let keys = getDefaults(call).dictionaryRepresentation().keys.filter({ (key) -> Bool in
       return isKey(key)
     }).map({ (key) -> String in
       return getKey(key)
@@ -63,10 +71,10 @@ public class CAPStoragePlugin: CAPPlugin {
   }
   
   @objc func clear(_ call: CAPPluginCall) {
-    getDefaults().dictionaryRepresentation().keys.filter({ (key) -> Bool in
+    getDefaults(call).dictionaryRepresentation().keys.filter({ (key) -> Bool in
       return isKey(key)
     }).forEach { (key) in
-      getDefaults().removeObject(forKey: key)
+      getDefaults(call).removeObject(forKey: key)
     }
     call.resolve()
   }
